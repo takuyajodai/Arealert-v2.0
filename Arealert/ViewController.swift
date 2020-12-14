@@ -122,6 +122,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
 //    }
     
     
+    //現在地に戻るボタン
+    @IBAction func showCurrentLocation(_ sender: Any) {
+        mapView.userTrackingMode = .follow
+    }
     
 }//class
 

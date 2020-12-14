@@ -30,6 +30,13 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="search"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YIl-W5-Bw9">
+                                <rect key="frame" x="352" y="124" width="46" height="30"/>
+                                <state key="normal" title="現在地"/>
+                                <connections>
+                                    <action selector="showCurrentLocation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="O2x-JQ-kFx"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -39,6 +46,8 @@
                             <constraint firstItem="XYv-tv-XvI" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="ROy-u2-gHU"/>
                             <constraint firstItem="XYv-tv-XvI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="YKc-F5-1mc"/>
                             <constraint firstAttribute="bottom" secondItem="j14-nB-vOA" secondAttribute="bottom" id="agx-ga-g5h"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="YIl-W5-Bw9" secondAttribute="trailing" constant="16" id="qWc-lJ-Y5Z"/>
+                            <constraint firstItem="YIl-W5-Bw9" firstAttribute="top" secondItem="XYv-tv-XvI" secondAttribute="bottom" constant="30" id="qkt-SN-DX0"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="XYv-tv-XvI" secondAttribute="trailing" constant="16" id="uNc-mj-Xfd"/>
                             <constraint firstItem="j14-nB-vOA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="xiB-eU-RVs"/>
                         </constraints>

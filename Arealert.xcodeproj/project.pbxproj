@@ -16,6 +16,7 @@
 		257E925B2522BD970051000F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 257E92592522BD970051000F /* LaunchScreen.storyboard */; };
 		257E92662522BD970051000F /* ArealertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257E92652522BD970051000F /* ArealertTests.swift */; };
 		257E92712522BD970051000F /* ArealertUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257E92702522BD970051000F /* ArealertUITests.swift */; };
+		257E92802522BDE20051000F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 257E927F2522BDE20051000F /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		257E926C2522BD970051000F /* ArealertUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ArealertUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		257E92702522BD970051000F /* ArealertUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArealertUITests.swift; sourceTree = "<group>"; };
 		257E92722522BD970051000F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		257E927F2522BDE20051000F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				257E92802522BDE20051000F /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +88,7 @@
 				257E92642522BD970051000F /* ArealertTests */,
 				257E926F2522BD970051000F /* ArealertUITests */,
 				257E92492522BD950051000F /* Products */,
+				257E927E2522BDE20051000F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -129,6 +133,14 @@
 				257E92722522BD970051000F /* Info.plist */,
 			);
 			path = ArealertUITests;
+			sourceTree = "<group>";
+		};
+		257E927E2522BDE20051000F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				257E927F2522BDE20051000F /* MapKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,7 +206,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1170;
-				LastUpgradeCheck = 1170;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Jodai Takuya";
 				TargetAttributes = {
 					257E92472522BD950051000F = {
@@ -346,6 +358,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -406,6 +419,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

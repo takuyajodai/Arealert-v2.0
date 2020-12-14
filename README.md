@@ -1,2 +1,2 @@
 # Arealert-v2.0
-map上でのアラートをするアプリケーション
+map上でalertを行う

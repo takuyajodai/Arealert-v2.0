@@ -29,15 +29,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         //Text Fieldのdelegateの通知先を設定
         inputText.delegate = self
         
+        //CLlocationManagerのインスタンス生成
+        //現在地の情報取得などに使う
         locationManager = CLLocationManager()
         locationManager.delegate = self
         
-        locationManager.requestWhenInUseAuthorization() //位置情報の取得許可
-        locationManager.startUpdatingLocation() //位置情報更新を指示
         
-        mapView.showsUserLocation = true
         
-
+        //位置情報の取得許可
+        locationManager.requestWhenInUseAuthorization()
+        
+        //位置情報更新を指示
+        locationManager.startUpdatingLocation()
+        
+        //地図の初期位置化
+        initMap()
+        
         
         
     }
@@ -67,6 +74,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
                             let pin = MKPointAnnotation()
                             pin.coordinate = targetCoordinate
                             pin.title = searchKey
+                            self.mapView.addAnnotation(pin)
+                            self.mapView.region = MKCoordinateRegion(center: targetCoordinate, latitudinalMeters: 500.0, longitudinalMeters: 500.0)
                             
                             //ここまでピンを置く作業(後で円を描画する時にピンを置く
                         }
@@ -76,36 +85,45 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         }
         return true
     }
-}//class
-    //GPSから値を取得した時に呼び出されるメソッド
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:[CLLocation]) {
-//
-//        //現在座標を取得
-//        let longitude = (locations.last?.coordinate.longitude.description)!
-//        let latitude = (locations.last?.coordinate.latitude.description)!
-//        print("[DBG]longitude : " + longitude)
-//        print("[DBG]latitude : " + latitude)
-//
-        //常に現在位置を表示する
-        //mapView.setCenter((locations.last?.coordinate)!, animated: true)
+    
+    
+    //位置情報取得に失敗したときに呼び出されるメソッド
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("error")
+    }
+    
+    //GPSから値を取得した時に呼び出されるメソッド(デリゲート)
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:[CLLocation]) {
 
-   
+        //現在位置を更新すると中心を変更
+        //mapView.userTrackingMode = .follow
+        //updateCurrentLocation((locations.last?.coordinate)!)
         
-        //CLGeocoderインスタンス
-        //let geocoder = CLGeocoder()
+    }
+    
+    
+    //viewのロード時に地図を初期化
+    func initMap() {
+        var region:MKCoordinateRegion = mapView.region
+        region.span.latitudeDelta = 0.01
+        region.span.longitudeDelta = 0.01
+        mapView.setRegion(region, animated: true)
         
-        //入力された文字から位置情報を取得
-//        geocoder.geocodeAddressString(searchKeyword!,completionHandler:{_,_ in (placemarks:[CLPlacemark]?,error:Error?,.self,}in
-//
-//        //位置情報が存在する場合1軒目の位置情報をplacemarkに取り出す
-//            if let placemark = placemarks?[0] {
-//                //位置情報から緯度経度が存在する場合，緯度経度をtargetCoordinateに取り出す
-//                if let targetCoodinate = placemark.location?.coordinate {
-//                    print(targetCoodinate)
-//                }
-//            }
-//        }
-//   }
-        
+        //ユーザの位置情報をマップ上に表示
+        mapView.showsUserLocation = true
+        mapView.userTrackingMode = .follow
+    }
+    
+//    //現在位置の更新のたび，中心位置を変更
+//    func updateCurrentLocation(_ coordinate:CLLocationCoordinate2D) {
+//        var region:MKCoordinateRegion = mapView.region
+//        region.center = coordinate
+//        mapView.setRegion(region, animated: true)
+//    }
+    
+    
+    
+}//class
+
 
 

@@ -171,6 +171,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         }
     }
     
+    //円の中心地を決める
+    @IBAction func mapLongPressed(_ sender: UILongPressGestureRecognizer) {
+        //mapview内のタップした場所を取得
+        let location:CGPoint = sender.location(in: mapView)
+        if sender.state == UIGestureRecognizer.State.ended {
+            //タップした位置を緯度，経度の座標に変換
+            let mapPoint:CLLocationCoordinate2D = mapView.convert(location, toCoordinateFrom: mapView)
+            //ピンを刺す
+            let pin = MKPointAnnotation()
+            pin.coordinate = CLLocationCoordinate2DMake(mapPoint.latitude, mapPoint.longitude)
+            pin.title = "ピン"
+            self.mapView.addAnnotation(pin)
+            //self.mapView.region = MKCoordinateRegion(center: pin.coordinate, latitudinalMeters: 500.0, longitudinalMeters: 500.0)
+        }
+        
+    }
 }//class
 
 

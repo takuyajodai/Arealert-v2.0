@@ -25,7 +25,7 @@
                                 </connections>
                             </mapView>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder=" search" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="XYv-tv-XvI">
-                                <rect key="frame" x="16" y="60" width="382" height="34"/>
+                                <rect key="frame" x="16" y="64" width="382" height="34"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="rsM-Uk-xmg"/>
@@ -35,13 +35,25 @@
                                 <textInputTraits key="textInputTraits" returnKeyType="search"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YIl-W5-Bw9">
-                                <rect key="frame" x="352" y="124" width="46" height="30"/>
+                                <rect key="frame" x="348" y="123" width="46" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="ukn-uP-irG"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                 <state key="normal" title="現在地"/>
                                 <connections>
                                     <action selector="showCurrentLocation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="O2x-JQ-kFx"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nPW-Er-c6R">
+                                <rect key="frame" x="20" y="123" width="58" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="MXq-np-iQo"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <state key="normal" title="Favorite"/>
+                                <connections>
+                                    <action selector="favoriteButtonAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Zrt-6I-Ug8"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -50,11 +62,13 @@
                         <constraints>
                             <constraint firstItem="j14-nB-vOA" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="04F-7G-aWE"/>
                             <constraint firstItem="j14-nB-vOA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="CGH-Ui-7nd"/>
-                            <constraint firstItem="XYv-tv-XvI" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="ROy-u2-gHU"/>
+                            <constraint firstItem="XYv-tv-XvI" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="ROy-u2-gHU"/>
+                            <constraint firstItem="nPW-Er-c6R" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Sew-ri-Dc6"/>
                             <constraint firstItem="XYv-tv-XvI" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="YKc-F5-1mc"/>
                             <constraint firstAttribute="bottom" secondItem="j14-nB-vOA" secondAttribute="bottom" id="agx-ga-g5h"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="YIl-W5-Bw9" secondAttribute="trailing" constant="16" id="qWc-lJ-Y5Z"/>
-                            <constraint firstItem="YIl-W5-Bw9" firstAttribute="top" secondItem="XYv-tv-XvI" secondAttribute="bottom" constant="30" id="qkt-SN-DX0"/>
+                            <constraint firstItem="nPW-Er-c6R" firstAttribute="top" secondItem="XYv-tv-XvI" secondAttribute="bottom" constant="25" id="lDi-iU-6ao"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="YIl-W5-Bw9" secondAttribute="trailing" constant="20" id="qWc-lJ-Y5Z"/>
+                            <constraint firstItem="YIl-W5-Bw9" firstAttribute="top" secondItem="XYv-tv-XvI" secondAttribute="bottom" constant="25" id="qkt-SN-DX0"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="XYv-tv-XvI" secondAttribute="trailing" constant="16" id="uNc-mj-Xfd"/>
                             <constraint firstItem="j14-nB-vOA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="xiB-eU-RVs"/>
                         </constraints>
@@ -62,6 +76,7 @@
                     <connections>
                         <outlet property="inputText" destination="XYv-tv-XvI" id="Th6-xN-ds4"/>
                         <outlet property="mapView" destination="j14-nB-vOA" id="Kbo-cU-NMT"/>
+                        <segue destination="fVX-e4-VuW" kind="show" identifier="showFavoriteView" id="g8H-YH-SnD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -72,6 +87,50 @@
                 </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="131.8840579710145" y="137.94642857142856"/>
+        </scene>
+        <!--Favaorite View Controller-->
+        <scene sceneID="bfC-5g-iSF">
+            <objects>
+                <viewController id="fVX-e4-VuW" customClass="FavaoriteViewController" customModule="Arealert" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eKj-ok-hRZ">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bSY-JO-dxG">
+                                <rect key="frame" x="0.0" y="62" width="414" height="780"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="780" id="erK-mk-zle"/>
+                                </constraints>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Rb-IB-ASu">
+                                <rect key="frame" x="20" y="20" width="31" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="cyb-81-Bqa"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <state key="normal" title="戻る"/>
+                                <connections>
+                                    <action selector="backButtonAction:" destination="fVX-e4-VuW" eventType="touchUpInside" id="fTx-OR-jEp"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="lZp-iM-kMP"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="bSY-JO-dxG" firstAttribute="top" secondItem="1Rb-IB-ASu" secondAttribute="bottom" constant="12" id="6qk-Nn-AYk"/>
+                            <constraint firstItem="1Rb-IB-ASu" firstAttribute="top" secondItem="lZp-iM-kMP" secondAttribute="top" constant="20" id="721-ad-Nwo"/>
+                            <constraint firstAttribute="bottom" secondItem="bSY-JO-dxG" secondAttribute="bottom" id="BIr-YN-UUq"/>
+                            <constraint firstItem="1Rb-IB-ASu" firstAttribute="leading" secondItem="lZp-iM-kMP" secondAttribute="leading" constant="20" id="YJF-gJ-x6w"/>
+                            <constraint firstItem="bSY-JO-dxG" firstAttribute="trailing" secondItem="lZp-iM-kMP" secondAttribute="trailing" id="Z15-FL-2Vu"/>
+                            <constraint firstItem="bSY-JO-dxG" firstAttribute="leading" secondItem="lZp-iM-kMP" secondAttribute="leading" id="cSj-DC-aWr"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="wNg-Z1-ZNB"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mdb-bE-9TD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1027.536231884058" y="137.94642857142856"/>
         </scene>
     </scenes>
     <resources>

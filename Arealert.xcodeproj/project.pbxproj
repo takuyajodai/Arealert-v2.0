@@ -17,6 +17,7 @@
 		257E92662522BD970051000F /* ArealertTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257E92652522BD970051000F /* ArealertTests.swift */; };
 		257E92712522BD970051000F /* ArealertUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 257E92702522BD970051000F /* ArealertUITests.swift */; };
 		257E92802522BDE20051000F /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 257E927F2522BDE20051000F /* MapKit.framework */; };
+		25F4D38E258A8A3900FCF2DB /* FavaoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F4D38D258A8A3900FCF2DB /* FavaoriteViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		257E92702522BD970051000F /* ArealertUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArealertUITests.swift; sourceTree = "<group>"; };
 		257E92722522BD970051000F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		257E927F2522BDE20051000F /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		25F4D38D258A8A3900FCF2DB /* FavaoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavaoriteViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				257E924D2522BD950051000F /* SceneDelegate.swift */,
 				257E924F2522BD950051000F /* ViewController.swift */,
 				257E92512522BD950051000F /* Main.storyboard */,
+				25F4D38D258A8A3900FCF2DB /* FavaoriteViewController.swift */,
 				257E92572522BD970051000F /* Assets.xcassets */,
 				257E92592522BD970051000F /* LaunchScreen.storyboard */,
 				257E925C2522BD970051000F /* Info.plist */,
@@ -274,6 +277,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				25F4D38E258A8A3900FCF2DB /* FavaoriteViewController.swift in Sources */,
 				257E92502522BD950051000F /* ViewController.swift in Sources */,
 				257E92562522BD950051000F /* Arealert.xcdatamodeld in Sources */,
 				257E924C2522BD950051000F /* AppDelegate.swift in Sources */,

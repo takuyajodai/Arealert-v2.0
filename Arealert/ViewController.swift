@@ -24,6 +24,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
     //円を格納する変数(のちのち配列にしたい
     //var mkCircle = MKCircle(center:CLLocationCoordinate2DMake(0.0, 0.0), radius: 10)
     
+    //円の情報を保持する配列
+    var circles: [MKCircle] = []
+    
+    
     //teratail
     var startPoint = CLLocationCoordinate2D()
     var circle: MKCircle?
@@ -55,6 +59,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         //地図の初期位置化
         initMap()
         
+        // コンパスの表示
+        let compass = MKCompassButton(mapView: mapView)
+        compass.compassVisibility = .adaptive
+        compass.frame = CGRect(x: 315, y: 160, width: 40, height: 40)
+        self.view.addSubview(compass)
+        // デフォルトのコンパスを非表示にする
+        mapView.showsCompass = false
+        
         // 通知許可の取得
         UNUserNotificationCenter.current().requestAuthorization(
             options: [.alert, .sound, .badge]){
@@ -67,6 +79,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         
         
     }
+    
+
+
+    
     
     //テキストフィールドのデリゲートメソッド
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -226,9 +242,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
                     //print("start")
 
                     // すでに円が表示してあれば消す
-                    if let _ = circle {
-                        mapView.removeOverlay(circle!)
-                    }
+                    // 複数範囲必要なため，消す必要なし
+//                    if let _ = circle {
+//                        mapView.removeOverlay(circle!)
+//                    }
 
                     //　最初にタップしたところを初期位置とする
                     let tapPoint = sender.location(in: mapView)
@@ -245,13 +262,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
                     
                     // 緯度1度あたり 111km = 11100m
                     // mapView の表示緯度（mapView.region.span）の 1/10 の円を初期半径とする
-                    // このあたりは適当
                     let r = mapView.region.span.latitudeDelta * 1110
                     circle = MKCircle(center: startPoint, radius: r)
                     mapView.addOverlay(circle!)
 
 
                 case .ended:
+                    if let circle = circle {
+                        circles.append(circle)
+                    }
                     // ロングタップ終了
                     print("end")
 
@@ -339,6 +358,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
             }
         }
     }
+    
+    
+    //セグエ，お気に入り画面へ
+    
+    @IBAction func favoriteButtonAction(_ sender: Any) {
+        self.performSegue(withIdentifier: "showFavoriteView", sender:nil)
+    }
+    
     
     
 }//class

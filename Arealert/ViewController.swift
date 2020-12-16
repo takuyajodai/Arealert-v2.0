@@ -9,8 +9,9 @@
 import UIKit
 import CoreLocation
 import MapKit
+import UserNotifications
 
-class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate, UNUserNotificationCenterDelegate {
     
     @IBOutlet var mapView: MKMapView!
     @IBOutlet weak var inputText: UITextField!
@@ -21,9 +22,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
     var locationManager: CLLocationManager!
     
     //円を格納する変数(のちのち配列にしたい
-    var mkCircle = MKCircle(center:CLLocationCoordinate2DMake(0.0, 0.0), radius: 10)
+    //var mkCircle = MKCircle(center:CLLocationCoordinate2DMake(0.0, 0.0), radius: 10)
     
-    //teratailで頂いた回答用
+    //teratail
     var startPoint = CLLocationCoordinate2D()
     var circle: MKCircle?
     
@@ -53,6 +54,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         
         //地図の初期位置化
         initMap()
+        
+        // 通知許可の取得
+        UNUserNotificationCenter.current().requestAuthorization(
+            options: [.alert, .sound, .badge]){
+            (granted, _) in
+            if granted{
+                UNUserNotificationCenter.current().delegate = self
+            }
+        }
         
         
         
@@ -107,6 +117,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         //現在位置を更新すると中心を変更
         //mapView.userTrackingMode = .follow
         //updateCurrentLocation((locations.last?.coordinate)!)
+        let location = locations.first
+        
+        //latitudeとlongitudeはアンラップ必要
+        if let latitude = location?.coordinate.latitude {
+            if let longitude = location?.coordinate.longitude {
+                let center = CLLocationCoordinate2DMake(latitude, longitude)
+                let inRange: Bool = contains(center)
+                if(inRange == true) {
+                    print("入った")
+                    notification()
+                }
+            }
+        }
         
     }
     
@@ -145,6 +168,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         //print("円ができた")
         return circle
     }
+    
     
   
     //tapジェスチャーは使用しない
@@ -199,7 +223,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         switch sender.state {
                 case .began:
                     // ロングタップ開始
-                    print("start")
+                    //print("start")
 
                     // すでに円が表示してあれば消す
                     if let _ = circle {
@@ -224,7 +248,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
 
                 case .changed:
                     // ドラッグ中
-                    print("changed")
+                    //print("changed")
 
                     // すでに円が表示してあれば消す
                     if let _ = circle {
@@ -244,7 +268,70 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
                 default:
                     print("それ以外")
                 }
+        
     }
+    
+    //フォアグラウンドでの通知(UNUserNotificationのデリゲートメソッド)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.alert, .badge, .sound])
+    }
+    
+    var inRange: Bool = false
+    
+//    //円の範囲内にあるかを判定する
+//    func inRangeDetect(_ location:CLLocationCoordinate2D) -> Bool {
+//        //判定する範囲
+//        let renderer = MKCircleRenderer(circle: circle)
+//
+//        // 緯度経度(CLLocationCoordinate2D)をマップ上のポイント(MKMapPoint)に変換する
+//        let mapPoint = MKMapPoint(location)
+//        // マップ上のポイントを MKCircleRenderer 領域内のポイントに変換する
+//        let rendererPoint = renderer.point(for: mapPoint)
+//        if renderer.path.contains(rendererPoint) {
+//            // 含まれる
+//            inRange = true
+//        }
+//        return inRange
+//
+//    }
+    
+    func contains(_ coordinate: CLLocationCoordinate2D) -> Bool {
+        if let circle = circle {
+            let renderer = MKCircleRenderer(circle: circle)
+            let mapPoint = MKMapPoint(coordinate)
+            let rendererPoint = renderer.point(for: mapPoint)
+            return renderer.path.contains(rendererPoint)
+        } else {
+            return false
+        }
+        
+    }
+    
+    func notification() {
+        print("通知")
+        //プッシュ通知のインスタンス生成
+        let notification = UNMutableNotificationContent()
+        notification.title = "Alert"
+        notification.subtitle = "範囲に入りました"
+        notification.body = "タップしてアプリを開いて下さい"
+        notification.sound = UNNotificationSound.default
+        
+        //通知タイミングを指定
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+        //通知のリクエスト
+        let request = UNNotificationRequest(identifier: "ID", content: notification,trigger: trigger)
+        //通知を実装
+        UNUserNotificationCenter.current().add(request) { (error: Error?) in
+            // エラーが存在しているかをif文で確認している
+            if error != nil {
+                print("通知でエラー")
+            } else {
+                print("")
+            }
+        }
+    }
+    
+    
 }//class
 
 // https://stackoverflow.com/questions/11077425/finding-distance-between-cllocationcoordinate2d-points
@@ -261,5 +348,15 @@ extension CLLocation {
         return from.distance(from: to)
     }
 }
+
+//extension MKCircle {
+//
+//    func contains(_ coordinate: CLLocationCoordinate2D) -> Bool {
+//        let renderer = MKCircleRenderer(circle: self)
+//        let mapPoint = MKMapPoint(coordinate)
+//        let rendererPoint = renderer.point(for: mapPoint)
+//        return renderer.path.contains(rendererPoint)
+//    }
+//}
 
 

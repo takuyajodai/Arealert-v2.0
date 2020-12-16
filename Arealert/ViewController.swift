@@ -10,7 +10,7 @@ import UIKit
 import CoreLocation
 import MapKit
 
-class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDelegate, MKMapViewDelegate {
     
     @IBOutlet var mapView: MKMapView!
     @IBOutlet weak var inputText: UITextField!
@@ -20,6 +20,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
     
     var locationManager: CLLocationManager!
     
+    //円を格納する変数(のちのち配列にしたい
+    var mkCircle = MKCircle(center:CLLocationCoordinate2DMake(0.0, 0.0), radius: 10)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +36,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         locationManager = CLLocationManager()
         locationManager.delegate = self
         
+        //MKMapViewのデリゲート
+        mapView.delegate = self
         
         
         //位置情報の取得許可
@@ -125,6 +129,46 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
     //現在地に戻るボタン
     @IBAction func showCurrentLocation(_ sender: Any) {
         mapView.userTrackingMode = .follow
+    }
+    
+    //円を作成するメソッド(MKMqpViewのデリゲートメソッド)
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let circle : MKCircleRenderer = MKCircleRenderer(overlay: overlay)
+        circle.strokeColor = UIColor.red
+        circle.fillColor = UIColor(red:0.5, green: 0.0, blue: 0.0, alpha: 0.5)
+        circle.lineWidth = 1.0
+        print("円ができた")
+        return circle
+    }
+    
+    
+    @IBAction func mapTapped(_ sender: UITapGestureRecognizer) {
+        if sender.state == UIGestureRecognizer.State.ended {
+            print("タップされた")
+            mapView.removeOverlay(mkCircle) //すでにマップ上にある円を削除
+            //現在地取得(円の中心)
+            let userCoordinate = mapView.userLocation.coordinate
+            //タップした座標を取得
+            let tapPoint: CGPoint = sender.location(in: self.mapView)
+            //タップした座標を型変換
+            let tap: CLLocationCoordinate2D = self.mapView.convert(tapPoint, toCoordinateFrom: mapView)
+            //タップしたとこのx座標格納
+            let tapx = tap.latitude
+            //タップしたとこのy座標格納
+            let tapy = tap.longitude
+            //CLLocationに現在地を格納
+            let mylocation: CLLocation = CLLocation(latitude: userCoordinate.latitude, longitude: userCoordinate.longitude)
+            //CLLocationにタップしたとこを格納
+            let taplocation: CLLocation = CLLocation(latitude: CLLocationDegrees(tapx), longitude: CLLocationDegrees(tapy))
+            //円の半径(現在地とタップしたとこの距離)を測定
+            let distance = mylocation.distance(from: taplocation)
+            //distanceを型変換
+            let circleRadius = CLLocationDistance(distance)
+            //円の中心と半径を設定
+            mkCircle = MKCircle(center: userCoordinate, radius:circleRadius)
+            //円を描写
+            mapView.addOverlay(mkCircle)
+        }
     }
     
 }//class

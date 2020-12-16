@@ -21,21 +21,24 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <gestureRecognizers/>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="vgU-vp-kE5" appends="YES" id="NBB-AT-RKh"/>
                                     <outletCollection property="gestureRecognizers" destination="rzQ-x1-9Re" appends="YES" id="CYY-Ni-X5O"/>
                                 </connections>
                             </mapView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="search" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="XYv-tv-XvI">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder=" search" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="XYv-tv-XvI">
                                 <rect key="frame" x="16" y="60" width="382" height="34"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="rsM-Uk-xmg"/>
                                 </constraints>
+                                <color key="textColor" red="0.18823529410000001" green="0.18823529410000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="search"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YIl-W5-Bw9">
                                 <rect key="frame" x="352" y="124" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="ukn-uP-irG"/>
+                                </constraints>
                                 <state key="normal" title="現在地"/>
                                 <connections>
                                     <action selector="showCurrentLocation:" destination="BYZ-38-t0r" eventType="touchUpInside" id="O2x-JQ-kFx"/>
@@ -62,11 +65,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="vgU-vp-kE5">
-                    <connections>
-                        <action selector="mapTapped:" destination="BYZ-38-t0r" id="hPr-OO-ZdZ"/>
-                    </connections>
-                </tapGestureRecognizer>
                 <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.20000000000000001" id="rzQ-x1-9Re">
                     <connections>
                         <action selector="mapLongPressed:" destination="BYZ-38-t0r" id="xwD-ph-PTC"/>

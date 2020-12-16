@@ -22,6 +22,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
     
     //円を格納する変数(のちのち配列にしたい
     var mkCircle = MKCircle(center:CLLocationCoordinate2DMake(0.0, 0.0), radius: 10)
+    
+    //teratailで頂いた回答用
+    var startPoint = CLLocationCoordinate2D()
+    var circle: MKCircle?
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -137,57 +142,124 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         circle.strokeColor = UIColor.red
         circle.fillColor = UIColor(red:0.5, green: 0.0, blue: 0.0, alpha: 0.5)
         circle.lineWidth = 1.0
-        print("円ができた")
+        //print("円ができた")
         return circle
     }
     
+  
+    //tapジェスチャーは使用しない
     
-    @IBAction func mapTapped(_ sender: UITapGestureRecognizer) {
-        if sender.state == UIGestureRecognizer.State.ended {
-            print("タップされた")
-            mapView.removeOverlay(mkCircle) //すでにマップ上にある円を削除
-            //現在地取得(円の中心)
-            let userCoordinate = mapView.userLocation.coordinate
-            //タップした座標を取得
-            let tapPoint: CGPoint = sender.location(in: self.mapView)
-            //タップした座標を型変換
-            let tap: CLLocationCoordinate2D = self.mapView.convert(tapPoint, toCoordinateFrom: mapView)
-            //タップしたとこのx座標格納
-            let tapx = tap.latitude
-            //タップしたとこのy座標格納
-            let tapy = tap.longitude
-            //CLLocationに現在地を格納
-            let mylocation: CLLocation = CLLocation(latitude: userCoordinate.latitude, longitude: userCoordinate.longitude)
-            //CLLocationにタップしたとこを格納
-            let taplocation: CLLocation = CLLocation(latitude: CLLocationDegrees(tapx), longitude: CLLocationDegrees(tapy))
-            //円の半径(現在地とタップしたとこの距離)を測定
-            let distance = mylocation.distance(from: taplocation)
-            //distanceを型変換
-            let circleRadius = CLLocationDistance(distance)
-            //円の中心と半径を設定
-            mkCircle = MKCircle(center: userCoordinate, radius:circleRadius)
-            //円を描写
-            mapView.addOverlay(mkCircle)
-        }
-    }
+//    @IBAction func mapTapped(_ sender: UITapGestureRecognizer) {
+//        if sender.state == UIGestureRecognizer.State.ended {
+//            print("タップされた")
+//            mapView.removeOverlay(mkCircle) //すでにマップ上にある円を削除
+//            //現在地取得(円の中心)
+//            let userCoordinate = mapView.userLocation.coordinate
+//            //タップした座標を取得
+//            let tapPoint: CGPoint = sender.location(in: self.mapView)
+//            //タップした座標を型変換
+//            let tap: CLLocationCoordinate2D = self.mapView.convert(tapPoint, toCoordinateFrom: mapView)
+//            //タップしたとこのx座標格納
+//            let tapx = tap.latitude
+//            //タップしたとこのy座標格納
+//            let tapy = tap.longitude
+//            //CLLocationに現在地を格納
+//            let mylocation: CLLocation = CLLocation(latitude: userCoordinate.latitude, longitude: userCoordinate.longitude)
+//            //CLLocationにタップしたとこを格納
+//            let taplocation: CLLocation = CLLocation(latitude: CLLocationDegrees(tapx), longitude: CLLocationDegrees(tapy))
+//            //円の半径(現在地とタップしたとこの距離)を測定
+//            let distance = mylocation.distance(from: taplocation)
+//            //distanceを型変換
+//            let circleRadius = CLLocationDistance(distance)
+//            //円の中心と半径を設定
+//            mkCircle = MKCircle(center: userCoordinate, radius:circleRadius)
+//            //円を描写
+//            mapView.addOverlay(mkCircle)
+//        }
+//    }
     
-    //円の中心地を決める
+    //ロングプレスからドラッグで範囲を指定しながら円を描く
     @IBAction func mapLongPressed(_ sender: UILongPressGestureRecognizer) {
-        //mapview内のタップした場所を取得
-        let location:CGPoint = sender.location(in: mapView)
-        if sender.state == UIGestureRecognizer.State.ended {
-            //タップした位置を緯度，経度の座標に変換
-            let mapPoint:CLLocationCoordinate2D = mapView.convert(location, toCoordinateFrom: mapView)
-            //ピンを刺す
-            let pin = MKPointAnnotation()
-            pin.coordinate = CLLocationCoordinate2DMake(mapPoint.latitude, mapPoint.longitude)
-            pin.title = "ピン"
-            self.mapView.addAnnotation(pin)
-            //self.mapView.region = MKCoordinateRegion(center: pin.coordinate, latitudinalMeters: 500.0, longitudinalMeters: 500.0)
-        }
+//        //mapview内のタップした場所を取得
+//        let location:CGPoint = sender.location(in: mapView)
+//        if sender.state == UIGestureRecognizer.State.ended {
+//            //タップした位置を緯度，経度の座標に変換
+//            let mapPoint:CLLocationCoordinate2D = mapView.convert(location, toCoordinateFrom: mapView)
+//            //ピンを刺す
+//            let pin = MKPointAnnotation()
+//            pin.coordinate = CLLocationCoordinate2DMake(mapPoint.latitude, mapPoint.longitude)
+//            pin.title = "ピン"
+//            self.mapView.addAnnotation(pin)
+//            //self.mapView.region = MKCoordinateRegion(center: pin.coordinate, latitudinalMeters: 500.0, longitudinalMeters: 500.0)
+//        }
+//
         
+        //https://teratail.com/questions/310568
+        
+        switch sender.state {
+                case .began:
+                    // ロングタップ開始
+                    print("start")
+
+                    // すでに円が表示してあれば消す
+                    if let _ = circle {
+                        mapView.removeOverlay(circle!)
+                    }
+
+                    //　最初にタップしたところを初期位置とする
+                    let tapPoint = sender.location(in: mapView)
+                    startPoint = mapView.convert(tapPoint, toCoordinateFrom: mapView)
+
+                    // 緯度1度あたり 111km = 11100m
+                    // mapView の表示緯度（mapView.region.span）の 1/10 の円を初期半径とする
+                    // このあたりは適当
+                    let r = mapView.region.span.latitudeDelta * 1110
+                    circle = MKCircle(center: startPoint, radius: r)
+                    mapView.addOverlay(circle!)
+
+
+                case .ended:
+                    // ロングタップ終了
+                    print("end")
+
+                case .changed:
+                    // ドラッグ中
+                    print("changed")
+
+                    // すでに円が表示してあれば消す
+                    if let _ = circle {
+                        mapView.removeOverlay(circle!)
+                    }
+
+                    let tapPoint = sender.location(in: mapView)
+
+                    // ドラッグした距離を求める
+                    let delta = mapView.convert(tapPoint, toCoordinateFrom: mapView)
+                    let r = CLLocation.distance(from: startPoint, to: delta)
+
+                    // ドラッグした長さに応じて円を描き直す
+                    circle = MKCircle(center: startPoint, radius: r)
+                    mapView.addOverlay(circle!)
+
+                default:
+                    print("それ以外")
+                }
     }
 }//class
 
+// https://stackoverflow.com/questions/11077425/finding-distance-between-cllocationcoordinate2d-points
+extension CLLocation {
+    /// Get distance between two points
+    ///
+    /// - Parameters:
+    ///   - from: first point
+    ///   - to: second point
+    /// - Returns: the distance in meters
+    class func distance(from: CLLocationCoordinate2D, to: CLLocationCoordinate2D) -> CLLocationDistance {
+        let from = CLLocation(latitude: from.latitude, longitude: from.longitude)
+        let to = CLLocation(latitude: to.latitude, longitude: to.longitude)
+        return from.distance(from: to)
+    }
+}
 
 

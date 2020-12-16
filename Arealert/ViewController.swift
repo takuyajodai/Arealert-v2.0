@@ -233,7 +233,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
                     //　最初にタップしたところを初期位置とする
                     let tapPoint = sender.location(in: mapView)
                     startPoint = mapView.convert(tapPoint, toCoordinateFrom: mapView)
-
+                    
+                    // 中心値にpinを差す
+                    let pin = MKPointAnnotation()
+                    let mapPoint:CLLocationCoordinate2D = mapView.convert(tapPoint, toCoordinateFrom: mapView)
+                    pin.coordinate = CLLocationCoordinate2DMake(mapPoint.latitude, mapPoint.longitude)
+                    
+                    pin.title = "ピン"
+                    self.mapView.addAnnotation(pin)
+                    
+                    
                     // 緯度1度あたり 111km = 11100m
                     // mapView の表示緯度（mapView.region.span）の 1/10 の円を初期半径とする
                     // このあたりは適当

@@ -201,8 +201,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
     //円を作成するメソッド(MKMqpViewのデリゲートメソッド)
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let circle : MKCircleRenderer = MKCircleRenderer(overlay: overlay)
-        circle.strokeColor = UIColor.red
-        circle.fillColor = UIColor(red:0.5, green: 0.0, blue: 0.0, alpha: 0.5)
+        circle.strokeColor = UIColor(red:0.2, green: 0.3, blue: 0.4, alpha: 1.0)
+        circle.fillColor = UIColor(red:0.2, green: 0.2, blue: 0.4, alpha: 0.5)
         circle.lineWidth = 1.0
         //print("円ができた")
         return circle

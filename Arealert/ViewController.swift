@@ -16,22 +16,44 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
     @IBOutlet var mapView: MKMapView!
     @IBOutlet weak var inputText: UITextField!
 
-    
-
-    
     var locationManager: CLLocationManager!
     
     //円を格納する変数(のちのち配列にしたい
-    //var mkCircle = MKCircle(center:CLLocationCoordinate2DMake(0.0, 0.0), radius: 10)
-    
-    //円の情報を保持する配列
-    var circles: [MKCircle] = []
-    
+    //var mkCircle = MKCircle(center:CLLocationCoordinate2DMake(0.0, 0.0), radius: 10
     
     //teratail
     var startPoint = CLLocationCoordinate2D()
     var circle: MKCircle?
     
+    
+    //----------セグエで受け渡しUserDefault------
+    
+    // 円の情報を保持する
+    var circleFav: MKCircle!
+    
+    // ピンの情報を保持する
+    var annotationFav: MKAnnotation!
+    
+    // お気に入りの情報を一つにまとめるリスト
+    //var favoriteList:[favoriteStruct] = []
+    
+    // お気に入りの保存値を扱うキーを設定
+    let key = "favorite_value"
+    // UserDefaultsのインスタンスを生成
+    let defaults = UserDefaults.standard
+    
+//    struct favoriteStruct {
+//
+//        var annotationStruct: MKAnnotation
+//        var circleStruct: MKCircle
+//        //構造体のイニシャライズ
+//        init() {
+//            annotationStruct = annotationFav
+//            circleStruct = circleFav
+//        }
+//    }
+
+    //-----------セグエで受け渡しUserDefault-----
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,6 +101,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
         
         
     }
+    
     
 
 
@@ -218,6 +241,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
 //        }
 //    }
     
+    
+
     //ロングプレスからドラッグで範囲を指定しながら円を描く
     @IBAction func mapLongPressed(_ sender: UILongPressGestureRecognizer) {
 //        //mapview内のタップした場所を取得
@@ -259,6 +284,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
                     pin.title = "ピン"
                     self.mapView.addAnnotation(pin)
                     
+                    //pin情報をannotations[]に保存
+                    annotationFav = pin
                     
                     // 緯度1度あたり 111km = 11100m
                     // mapView の表示緯度（mapView.region.span）の 1/10 の円を初期半径とする
@@ -269,7 +296,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
 
                 case .ended:
                     if let circle = circle {
-                        circles.append(circle)
+                        //circle情報をcircles[]に保存
+                        //circles.append(circle)
+                        
+                        circleFav = circle
+                        //取り出せる情報
+                        //print(circleFav.coordinate)
+                        //print(circleFav.radius)
+                        //print(annotationFav.coordinate)
+                        //print(annotationFav.title)
+                        //print(annotationFav.subtitle)
+                        
+                        //let favorite = init(annotationFav!, circleFav!)
+                        //favoriteList.append(favorite)
+                        //defaults.set(favoriteList, forKey: key)
+                        //defaults.setEncoded(favoriteList, forKey: key)
                     }
                     // ロングタップ終了
                     print("end")
@@ -297,6 +338,37 @@ class ViewController: UIViewController, CLLocationManagerDelegate, UITextFieldDe
                     print("それ以外")
                 }
         
+    }
+    
+    
+    @IBAction func mapTapped(_ sender: UITapGestureRecognizer) {
+        // タップした座標をマップ内の座標に変換
+        let touchPoint = sender.location(in: mapView)
+        let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+        let mapPoint = MKMapPoint(touchCoordinate)
+
+        var deleteTarget:[MKOverlay] = []
+        for overlay in mapView.overlays {
+            let ovRect = overlay.boundingMapRect
+            // タップした座標がオーバーレイに含まれている場合は削除対象に加える
+            if ovRect.contains(mapPoint) {
+                deleteTarget.append(overlay)
+            }
+        }
+        // マップから対象を削除
+        mapView.removeOverlays(deleteTarget)
+    }
+    
+    //後でどうにかする
+//アノテーションビューを返すメソッド
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if let pin = view.annotation as? MKPointAnnotation {
+            //キーボード入力したい
+            //let inputTitle = becomeFirstResponder()
+            //pin.title = inputTitle
+            mapView.removeAnnotation(pin)
+            mapView.removeOverlay(circle!)
+        }
     }
     
     //フォアグラウンドでの通知(UNUserNotificationのデリゲートメソッド)
@@ -395,4 +467,14 @@ extension CLLocation {
 //    }
 //}
 
+extension UserDefaults {
+  func setEncoded<T: Encodable>(_ value: T, forKey key: String) {
+    guard let data = try? JSONEncoder().encode(value) else {
+       print("Can not Encode to JSON.")
+       return
+    }
 
+    set(data, forKey: key)
+  }
+
+}
